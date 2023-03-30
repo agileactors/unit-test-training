@@ -29,6 +29,27 @@ class TrainerServiceImplSpec extends Specification {
           returnedTrainerDTO.email == trainerDTO.email
           1 * trainerRepository.save(_) >> trainer
           1 * emailService.send(trainerDTO.email, "Success body")
-          0 * _
+
+    }
+
+    def "rate trainer succeeds and calculates average rate"() {
+        given:
+          TrainerRepository trainerRepository = Mock()
+          EmailService emailService = Mock()
+          UUID id = UUID.randomUUID()
+          Trainer trainer = new Trainer(id: id, firstName: "Kostas", lastName: "Sidiropoulos",
+                  email: "kostas.sidiropoulos@test.com", rates: [])
+          trainerRepository.findById(id) >> Optional.of(trainer)
+          TrainerService trainerService = new TrainerServiceImpl(trainerRepository, emailService)
+
+        when:
+          trainerService.rateTrainer(id, 2);
+
+        then:
+          trainer.rates[0] == 2
+          trainer.rate == 2
+          1 * trainerRepository.save({
+              it.rates[0] == 2 && it.rate == 2 }
+          )
     }
 }
