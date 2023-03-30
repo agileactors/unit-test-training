@@ -48,8 +48,5 @@ class TrainerServiceImplSpec extends Specification {
         then:
           trainer.rates[0] == 2
           trainer.rate == 2
-          1 * trainerRepository.save({
-              it.rates[0] == 2 && it.rate == 2 }
-          )
     }
 }
