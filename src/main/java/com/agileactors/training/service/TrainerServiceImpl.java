@@ -5,26 +5,42 @@ import com.agileactors.training.dto.TrainerDTO;
 import com.agileactors.training.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
-public class TrainerServiceImpl implements TrainerService{
+public class TrainerServiceImpl implements TrainerService {
 
     private TrainerRepository trainerRepository;
+    private EmailService emailService;
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository, EmailService emailService) {
         this.trainerRepository = trainerRepository;
+        this.emailService = emailService;
     }
 
     @Override
     public TrainerDTO createTrainer(TrainerDTO trainerDTO) {
         Trainer trainer = trainerRepository.save(toTrainer(trainerDTO));
+        emailService.send(trainer.getEmail(), "Success body");
         return toTrainerDto(trainer);
     }
+
+
 
     @Override
     public TrainerDTO getTrainer(UUID id) {
         return trainerRepository.findById(id).map(this::toTrainerDto).orElse(null);
+    }
+
+    @Override
+    public void rateTrainer(UUID id, Integer newRate) {
+        Trainer trainer = trainerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        List<Integer> rates = trainer.getRates();
+        rates.add(newRate);
+        Double avgRate = averageRate(rates);
+        trainer.setRate(avgRate);
+        trainerRepository.save(trainer);
     }
 
     private Trainer toTrainer(TrainerDTO trainerDTO) {
@@ -43,5 +59,11 @@ public class TrainerServiceImpl implements TrainerService{
         trainerDto.setFirstName(trainer.getFirstName());
         trainerDto.setLastName(trainer.getLastName());
         return trainerDto;
+    }
+
+    private Double averageRate(List<Integer> rates) {
+        return rates.stream()
+                .mapToDouble(a->a)
+                .average().orElse(0);
     }
 }

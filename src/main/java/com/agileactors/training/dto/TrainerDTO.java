@@ -1,5 +1,6 @@
 package com.agileactors.training.dto;
 
+import java.util.List;
 import java.util.UUID;
 
 public class TrainerDTO {
@@ -9,6 +10,10 @@ public class TrainerDTO {
     private String lastName;
 
     private String email;
+
+    private List<Integer> rates;
+
+    private Double rate;
 
     public UUID getId() {
         return id;
@@ -40,5 +45,21 @@ public class TrainerDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Integer> getRates() {
+        return rates;
+    }
+
+    public void setRates(List<Integer> rates) {
+        this.rates = rates;
+    }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 }

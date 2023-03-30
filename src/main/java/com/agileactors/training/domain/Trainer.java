@@ -3,6 +3,7 @@ package com.agileactors.training.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +21,12 @@ public class Trainer {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "rates")
+    private List<Integer> rates;
+
+    @Column(name = "rate")
+    private Double rate;
 
     public UUID getId() {
         return id;
@@ -51,5 +58,21 @@ public class Trainer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Integer> getRates() {
+        return rates;
+    }
+
+    public void setRates(List<Integer> rates) {
+        this.rates = rates;
+    }
+
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 }

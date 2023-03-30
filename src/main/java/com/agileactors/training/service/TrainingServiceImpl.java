@@ -21,8 +21,6 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public String getTrainingNameById(UUID id) {
         Optional<Training> optionalTraining = trainingRepository.findById(id);
-
         return optionalTraining.map(Training::getName).orElse(null);
-
     }
 }

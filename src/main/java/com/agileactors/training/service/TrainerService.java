@@ -9,4 +9,6 @@ public interface TrainerService {
     TrainerDTO createTrainer(TrainerDTO trainerDTO);
 
     TrainerDTO getTrainer(UUID id);
+
+    void rateTrainer(UUID id, Integer rate);
 }
