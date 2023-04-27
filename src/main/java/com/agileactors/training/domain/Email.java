@@ -31,4 +31,17 @@ public class Email {
 
     @Column(name = "sent_at")
     private Instant sentAt;
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                ", emailStatus=" + emailStatus +
+                ", createdAt=" + createdAt +
+                ", sentAt=" + sentAt +
+                '}';
+    }
 }

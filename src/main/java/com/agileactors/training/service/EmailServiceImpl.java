@@ -25,7 +25,8 @@ public class EmailServiceImpl implements EmailService {
 
     public void sendNewTrainerCreatedEmail(Trainer trainer) {
         emailRepository.save(new Email(UUID.randomUUID(), trainer.getEmail(),
-                "New", "", EmailStatus.PENDING, Instant.now(), null));
+                "New Trainer", String.format("Trainer %s has been added.", trainer.getEmail()),
+                EmailStatus.PENDING, Instant.now(), null));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

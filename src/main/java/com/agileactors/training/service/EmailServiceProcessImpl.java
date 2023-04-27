@@ -33,6 +33,7 @@ public class EmailServiceProcessImpl {
         pendingEmails.forEach(email -> {
             try {
                 emailService.processEmail(email);
+                log.info("Email {} has been sent.", email);
             } catch (EmailProcessException e) {
                 log.error("Sending Email[" + email.getId() + "] failed.", e.getThrowable());
             }
