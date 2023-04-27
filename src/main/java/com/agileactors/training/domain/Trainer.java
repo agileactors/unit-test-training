@@ -1,9 +1,13 @@
 package com.agileactors.training.domain;
 
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,25 +20,35 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@TypeDefs({
+        @TypeDef(
+                name = "list-array",
+                typeClass = ListArrayType.class
+        )
+})
 public class Trainer {
 
     @Id
     @Column(name = "trainer_id")
     private UUID id;
 
-    @Column(name = "trainer_first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "trainer_last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email")
     private String email;
 
+    @Type(type = "list-array")
     @Column(name = "rates")
     private List<Integer> rates;
 
     public double getAvgRate() {
+        if (rates == null) {
+            return 0;
+        }
         return rates.stream()
                 .mapToDouble(a -> a)
                 .average().orElse(0);

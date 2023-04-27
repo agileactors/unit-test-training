@@ -1,0 +1,71 @@
+spring:
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+    parser:
+      allow-single-quotes: true
+    serialization:
+      fail-on-empty-beans: false
+    mapper:
+      DEFAULT_VIEW_INCLUSION: true
+  mail:
+    host: localhost
+    port: 3025
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          writetimeout: 5000
+          timeout: 5000
+          starttls:
+            enable: true
+    username: test1
+    password: pwd1
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        jdbc:
+          time_zone: Europe/Athens
+        default_schema: ${db.schema}
+        temp:
+          use_jdbc_metadata_defaults: false
+      javax:
+        persistence:
+          lock:
+            timeout: 0
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    schemas: ${db.schema}
+  datasource:
+    driverClassName: org.postgresql.Driver
+    password: postgres
+    username: postgres
+    url: jdbc:postgresql://${db.host}:${db.port}/postgres?currentSchema=${db.schema}
+management:
+  server:
+    port: 8081
+  endpoint:
+    health:
+      show-details: always
+logging:
+  level:
+    org:
+      apache:
+        coyote: debug
+      hibernate: error
+    root: info
+server:
+  servlet:
+    context-path: /api/
+db:
+  port: 5432
+  host: localhost
+  schema: unit_test_training
+
+

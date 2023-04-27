@@ -27,7 +27,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         Trainer trainer = trainerRepository.save(newTrainer);
 
-        emailService.send(trainer.getEmail(), "Success body");
+        emailService.sendNewTrainerCreatedEmail(trainer);
         return trainer;
     }
 
