@@ -1,46 +1,47 @@
 package com.agileactors.training.service
 
 import com.agileactors.training.domain.Training
+import com.agileactors.training.exception.ResourceNotFoundException
 import com.agileactors.training.repository.TrainingRepository
 import spock.lang.Specification
 
 class TrainingServiceImplSpec extends Specification {
 
-    def "get training name by id returns correct name"() {
+    def "get training returns the correct resource"() {
         given:
-          TrainingRepository trainingRepository = Mock()
-          TrainingServiceImpl trainingService = new TrainingServiceImpl(trainingRepository)
-          Training training = new Training()
-          UUID trainingId = UUID.randomUUID()
-          training.setId(trainingId)
-          training.setName("unit test")
+            TrainingRepository trainingRepository = Mock()
+            TrainingServiceImpl trainingService = new TrainingServiceImpl(trainingRepository)
+
+        UUID trainingId = UUID.randomUUID()
+            String trainingName = "unit test"
+            Training training = new Training(trainingId, trainingName, null)
 
         and:
-          trainingRepository.findById(trainingId) >> Optional.of(training)
+            trainingRepository.findById(trainingId) >> Optional.of(training)
 
         when:
-          String trainingName = trainingService.getTrainingNameById(trainingId)
+            Training repositoryTraining = trainingService.getById(trainingId)
 
         then:
-          trainingName == "unit test"
+            repositoryTraining.name == trainingName
+            repositoryTraining.id == trainingId
     }
 
-    def "get training name by id returns null when id is not found"() {
+    def "get training throws exception if resource is not found"() {
         given:
-          TrainingRepository trainingRepository = Mock()
-          TrainingServiceImpl trainingService = new TrainingServiceImpl(trainingRepository)
-          Training training = new Training()
-          UUID trainingId = UUID.randomUUID()
-          training.setId(trainingId)
-          training.setName("unit test")
+            TrainingRepository trainingRepository = Mock()
+            TrainingServiceImpl trainingService = new TrainingServiceImpl(trainingRepository)
 
         and:
-          trainingRepository.findById(trainingId) >> Optional.of(training)
+            UUID trainingId = UUID.randomUUID()
+
+            trainingRepository.findById(trainingId) >> Optional.empty()
 
         when:
-          String trainingName = trainingService.getTrainingNameById(UUID.randomUUID())
+            trainingService.getById(trainingId)
 
         then:
-          !trainingName
+            final ResourceNotFoundException exception = thrown()
+            exception.message == "Training[" + trainingId + "] not found"
     }
 }
