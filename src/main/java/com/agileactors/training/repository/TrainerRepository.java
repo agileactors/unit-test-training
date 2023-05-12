@@ -13,4 +13,6 @@ public interface TrainerRepository extends JpaRepository<Trainer, UUID> {
 
     Trainer findByLastName(String lastName);
 
+    Trainer findByEmail(String email);
+
 }

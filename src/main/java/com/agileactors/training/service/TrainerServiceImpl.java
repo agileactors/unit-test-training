@@ -25,6 +25,10 @@ public class TrainerServiceImpl implements TrainerService {
 
         Objects.requireNonNull(newTrainer);
 
+        if (trainerRepository.findByEmail(createTrainerDto.getEmail()) != null) {
+            throw new RuntimeException("Trainer already exists");
+        }
+
         Trainer trainer = trainerRepository.save(newTrainer);
 
         emailService.sendNewTrainerCreatedEmail(trainer);
@@ -39,6 +43,9 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public void rateTrainer(UUID id, Integer newRate) throws ResourceNotFoundException {
+        if (newRate < 0 || newRate > 5) {
+            throw new RuntimeException("Invalid rate");
+        }
         Trainer trainer = getById(id);
         trainer.addRate(newRate);
         trainerRepository.save(trainer);
