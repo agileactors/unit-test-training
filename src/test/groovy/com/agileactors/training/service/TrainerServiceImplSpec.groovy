@@ -37,7 +37,7 @@ class TrainerServiceImplSpec extends Specification {
             createdTrainer.rates.size() == 0
             1 * trainerRepository.save(_) >> trainer
             1 * conversionService.convert(createTrainerDto, Trainer.class) >> trainer
-            1 * emailService.sendNewTrainerCreatedEmail(createTrainerDto.email, "Success body")
-            0 * _
+            1 * emailService.sendNewTrainerCreatedEmail(trainer)
+            1 * trainerRepository.findByEmail(createTrainerDto.email)
     }
 }
